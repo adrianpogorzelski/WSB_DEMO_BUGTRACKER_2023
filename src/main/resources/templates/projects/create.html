@@ -10,7 +10,7 @@
 <form th:action="@{/projects/save}" th:object="${project}" method="post">
     <div class="form-group">
         <label for="project-creator">Autor</label>
-        <select id="project-creator" name="creator">
+        <select id="project-creator" th:field="*{creator}">
             <option th:each="person : ${people}"
                     th:value="${person.id}"
                     th:text="${person.username}"></option>

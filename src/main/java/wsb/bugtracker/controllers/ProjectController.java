@@ -5,11 +5,14 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
+
+import jakarta.validation.Valid;
 import wsb.bugtracker.filters.ProjectFilter;
 import wsb.bugtracker.models.Person;
 import wsb.bugtracker.models.Project;
@@ -51,8 +54,17 @@ public class ProjectController {
     }
 
     @PostMapping("/save")
-    ModelAndView save() {
-        ModelAndView modelAndView = new ModelAndView();
+    ModelAndView save(@ModelAttribute @Valid Project project, BindingResult bindingResult) {
+        ModelAndView modelAndView = new ModelAndView("redirect:/projects");
+
+        if (bindingResult.hasErrors()) {
+            modelAndView.setViewName("projects/create");
+            modelAndView.addObject("project", project);
+            modelAndView.addObject("people", personService.findAll());
+            return modelAndView;
+        }
+
+        projectService.save(project);
         return modelAndView;
     }
 

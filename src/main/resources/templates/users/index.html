@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en" layout:decorate="~{/main-layout/mainLayout}" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <meta charset="UTF-8">
+    <title>Użytkownicy</title>
+</head>
+<body>
+
+<section layout:fragment="custom-content">
+    <div class="container">
+        <h2>Super tajne dane (proszę nie wyciekiwać)</h2>
+        <a th:href="@{/users/add}"><button  class="btn btn-primary">Dodaj użytkownika</button></a>
+        <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">Id</th>
+                <th scope="col">Nazwa użytkownika</th>
+                <th scope="col">Hasło</th>
+                <th scope="col">Usuń</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="person : ${people}">
+                <td th:text="${person.id}"></td>
+                <td th:text="${person.name}"></td>
+                <td th:text="${person.password}"></td>
+                <td><button class="btn btn-danger">Usuń</button></td>
+            </tr>
+        </tbody>
+    </table>
+    </div>
+</section>
+
+</body>
+</html>

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" layout:decorate="~{/main-layout/mainLayout}" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 <head>
     <meta charset="UTF-8">
     <title>Projekty</title>
@@ -7,8 +7,9 @@
           integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
 </head>
 <body>
-<div class="container">
-    <h2 th:text="#{projects.index}"></h2>
+<section layout:fragment="custom-content">
+    <div class="container">
+    <h2 th:text="#{projects.title}"></h2>
 
     <form th:action="@{/projects}" th:object="${filter}" class="row">
         <div class="col">
@@ -46,9 +47,11 @@
 
         <div class="card-body">
             <p class="card-text" th:text="${project.getDescription()}"></p>
+            <a th:href="@{/projects/delete/{id}(id=${project.getId()})}">usuń</a>
         </div>
     </div>
 
 </div>
+</section>
 </body>
 </html>

@@ -15,6 +15,8 @@ import wsb.bugtracker.models.Issue;
 import wsb.bugtracker.repositories.IssueRepository;
 import wsb.bugtracker.services.ProjectService;
 
+import java.util.List;
+
 @Controller
 @AllArgsConstructor
 @RequestMapping("/issues")
@@ -22,6 +24,16 @@ public class IssueController {
 
     private final IssueRepository issueRepository;
     private final ProjectService projectService;
+
+    @GetMapping
+    ModelAndView index() {
+        ModelAndView modelAndView = new ModelAndView("issues/index");
+
+        List<Issue> issues = issueRepository.findAll();
+        modelAndView.addObject("issues", issues);
+
+        return modelAndView;
+    }
 
     @GetMapping("/create")
     ModelAndView create() {

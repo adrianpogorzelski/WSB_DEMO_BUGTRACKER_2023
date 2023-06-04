@@ -1,13 +1,12 @@
 package wsb.bugtracker.controllers;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import wsb.bugtracker.filters.ProjectFilter;
 import wsb.bugtracker.models.Person;
@@ -35,6 +34,43 @@ public class ProjectController {
         return modelAndView;
     }
 
+    @GetMapping("/create")
+    ModelAndView create() {
+        ModelAndView modelAndView = new ModelAndView("projects/create");
 
+        Project newProject = new Project();
+        newProject.setEnabled(true);
 
+        modelAndView.addObject("project", newProject);
+
+        List<Person> people = personService.findAll();
+        modelAndView.addObject("people", people);
+
+        return modelAndView;
+    }
+
+    @PostMapping("/save")
+    ModelAndView save(@ModelAttribute @Valid Project project,
+                      BindingResult bindingResult) {
+
+        ModelAndView modelAndView = new ModelAndView("redirect:/projects");
+
+        if (bindingResult.hasErrors()) {
+            modelAndView.setViewName("projects/create");
+            modelAndView.addObject("project", project);
+            modelAndView.addObject("people", personService.findAll());
+            return modelAndView;
+        }
+
+        projectService.save(project);
+
+        return modelAndView;
+    }
+
+    @GetMapping("/delete/{id}")
+    ModelAndView delete(@PathVariable Long id) {
+        System.out.println("usuwanie projektu " + id);
+        projectService.delete(id);
+        return new ModelAndView("redirect:/projects");
+    }
 }
